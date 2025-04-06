@@ -1,38 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Risk Assessment</title>
-  <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Biryani:wght@400;600&display=swap" rel="stylesheet">
+  <title>Risk Assessment Dashboard</title>
 </head>
+<style>
+/* General Body Styling */
+html{
+  scroll-behavior: smooth;
+}
+
+.navbar {
+    background-color: #1e421d;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.navbar ul{
+  list-style-type: none;
+  display: flex;
+  gap: 40px;
+}
+
+.navbar a{
+        color: #D6AF6E;
+        font-size: 30px;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        font-family: 'Helvetica', sans-serif; /* Change font specifically for links */
+    }
+
+.navbar-menu a:hover {
+    color: #f1e3cc;
+}
+
+
+body {
+  padding: 0; /* Remove body padding */
+  font-family: 'Biryani', sans-serif;
+  background-color: #e1e587; 
+  margin: 0;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+h1 {
+  color: #1e421d; 
+  font-size: 2.5rem;
+}
+
+.sort-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  align-items: center;
+}
+
+.sort-controls select,
+.sort-controls button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sort-controls button {
+  background-color: #a0c79e; 
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sort-controls button:hover {
+  background-color: #8cae8a;
+  transform: scale(1.1);
+}
+
+/* Table Styling */
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 0 auto; /* Centers the table horizontally */
+  margin-top: 30px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: opacity 0.5s ease-in-out;
+}
+
+th,
+td {
+  padding: 15px 20px;
+  text-align: center;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #7ba963;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+tr:nth-child(even) {
+  background-color: #d9efd4;
+}
+
+tr:nth-child(odd) {
+  background-color: #f0f1dc; 
+}
+
+tr td {
+  cursor: pointer;
+}
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-top: 60px;
+  transition: all 0.5s ease;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+
+  .sort-controls select,
+  .sort-controls button {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+}
+
+/* Container Styling for the Table */
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+</style>
 <body>
-  <h1>Risk Assessment Data</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Ticker</th>
-        <th>Market Risk</th>
-        <th>Financial Risk</th>
-        <th>Valuation Risk</th>
-        <th>Sentiment Risk</th>
-        <th>Liquidity Risk</th>
-        <th>Total Risk Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% riskData.forEach(risk => { %>
+  
+<nav class="navbar">
+    <ul>
+        <li><a href="#R">Ranking</a></li>
+        <li><a href="#T">Types of Risks</a></li>
+    </ul>
+</nav>
+
+<div>
+  <script>
+    app.use(express.static(path.join(__dirname, 'public')));
+  </script>
+  <img style="float: left; padding-left: 100px; padding-right: 100px; padding-top: 70px;" 
+  src="better-bids-logo.png" width="650" height="500"/>
+  <h1
+        style="padding-top: 100px; margin-left:45px; margin-top: 0px; line-height: 1; font-size: 70px;">
+        Better Bids
+        </h1>
+        <h2 style="margin-bottom: 100px; padding-right: 100px; font-size: 24px;">
+            In today's economy, just saving money is losing money. Investing in stocks has never been more important for
+            financial growth and stability. 
+            We want to make a one-stop, easy solution for the risk averse. <br>
+            Better Bids does predictive risk analysis on different companies in the stock 
+            market and ranks the best companies to invest in, with respect to different types of economic risks. 
+            It provides a user friendly and approachable interface for even total beginners to the 
+            stock market, allowing them to make informed financial decisions.
+        </h2>
+
+</div>
+
+  <div>
+  <h1 id="R" style="text-align: center; padding-top: 70px;";>Rankings</h1> 
+  <!-- Sorting Controls -->
+  <div class="sort-controls">
+    <label for="sortCategory">Sort by:</label>
+    <select id="sortCategory">
+      <option value="ticker">Ticker</option>
+      <option value="market_risk">Market Risk</option>
+      <option value="financial_risk">Financial Risk</option>
+      <option value="valuation_risk">Valuation Risk</option>
+      <option value="sentiment_risk">Sentiment Risk</option>
+      <option value="liquidity_risk">Liquidity Risk</option>
+      <option value="total_risk_score">Total Risk Score</option>
+    </select>
+    <button onclick="sortByDropdown()">Sort</button>
+  </div>
+
+  <!-- Table Container -->
+  <div class="table-container">
+    <table id="riskTable">
+      <thead>
         <tr>
-          <td><%= risk.ticker %></td>
-          <td><%= risk.market_risk %></td>
-          <td><%= risk.financial_risk %></td>
-          <td><%= risk.valuation_risk %></td>
-          <td><%= risk.sentiment_risk %></td>
-          <td><%= risk.liquidity_risk %></td>
-          <td><%= risk.total_risk_score %></td>
+          <th>Ticker</th>
+          <th>Company</th>
+          <th>Market Risk</th>
+          <th>Financial Risk</th>
+          <th>Valuation Risk</th>
+          <th>Sentiment Risk</th>
+          <th>Liquidity Risk</th>
+          <th>Total Risk Score</th>
         </tr>
-      <% }) %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% 
+          const companyNames = {
+            AAPL: "Apple Inc.",
+            TSLA: "Tesla Inc.",
+            MSFT: "Microsoft Corporation",
+            AMC: "AMC Entertainment",
+            KO: "Coca-Cola Company",
+            GOOG: "Alphabet Inc.",
+            NFLX: "Netflix Inc.",
+            AMZN: "Amazon.com Inc.",
+            META: "Meta Platforms Inc.",
+            NVDA: "NVIDIA Corporation",
+            SPY: "SPDR S&P 500 ETF",
+            BABA: "Alibaba Group"
+          };
+
+          riskData.forEach(risk => {%>
+
+          <tr onclick="showModal"('<%= risk.ticker %>', '<%= companyNames[risk.ticker] || 'Unknown' %>', <%= risk.market_risk %>, <%= risk.financial_risk %>, <%= risk.valuation_risk %>, <%= risk.sentiment_risk %>, <%= risk.liquidity_risk %>, <%= risk.total_risk_score %>)">
+            <td><%= risk.ticker %></td>
+            <td><%= companyNames[risk.ticker] || "Unknown" %></td>
+            <td><%= risk.market_risk.toFixed(2) %></td>
+            <td><%= risk.financial_risk.toFixed(2) %></td>
+            <td><%= risk.valuation_risk.toFixed(2) %></td>
+            <td><%= risk.sentiment_risk.toFixed(2) %></td>
+            <td><%= risk.liquidity_risk.toFixed(2) %></td>
+            <td><%= risk.total_risk_score.toFixed(2) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal for Detailed Info -->
+  <div id="riskModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Detailed Risk Information</h2>
+      <p><strong>Ticker:</strong> <span id="modalTicker"></span></p>
+      <p><strong>Company:</strong> <span id="modalCompany"></span></p>
+      <p><strong>Market Risk:</strong> <span id="modalMarketRisk"></span></p>
+      <p><strong>Financial Risk:</strong> <span id="modalFinancialRisk"></span></p>
+      <p><strong>Valuation Risk:</strong> <span id="modalValuationRisk"></span></p>
+      <p><strong>Sentiment Risk:</strong> <span id="modalSentimentRisk"></span></p>
+      <p><strong>Liquidity Risk:</strong> <span id="modalLiquidityRisk"></span></p>
+      <p><strong>Total Risk Score:</strong> <span id="modalTotalRiskScore"></span></p>
+    </div>
+  </div>
+
+  <!-- JavaScript for Sorting and Modal -->
+  <script>
+    function sortByDropdown() {
+      const category = document.getElementById("sortCategory").value;
+      const table = document.getElementById("riskTable");
+      const tbody = table.tBodies[0];
+      const rows = Array.from(tbody.rows);
+
+      // Map category to column index
+      const colIndexMap = {
+        ticker: 0,
+        market_risk: 2,
+        financial_risk: 3,
+        valuation_risk: 4,
+        sentiment_risk: 5,
+        liquidity_risk: 6,
+        total_risk_score: 7
+      };
+
+      const colIndex = colIndexMap[category];
+
+      rows.sort((a, b) => {
+        const aText = a.cells[colIndex].textContent.trim();
+        const bText = b.cells[colIndex].textContent.trim();
+
+        const aVal = isNaN(aText) ? aText : parseFloat(aText);
+        const bVal = isNaN(bText) ? bText : parseFloat(bText);
+
+        return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+      });
+
+      // Re-append rows in new order
+      rows.forEach(row => tbody.appendChild(row));
+    }
+
+    // Modal Functionality
+    function showModal(ticker, company, marketRisk, financialRisk, valuationRisk, sentimentRisk, liquidityRisk, totalRiskScore) {
+      document.getElementById("modalTicker").textContent = ticker;
+      document.getElementById("modalCompany").textContent = company;
+      document.getElementById("modalMarketRisk").textContent = marketRisk.toFixed(2);
+      document.getElementById("modalFinancialRisk").textContent = financialRisk.toFixed(2);
+      document.getElementById("modalValuationRisk").textContent = valuationRisk.toFixed(2);
+      document.getElementById("modalSentimentRisk").textContent = sentimentRisk.toFixed(2);
+      document.getElementById("modalLiquidityRisk").textContent = liquidityRisk.toFixed(2);
+      document.getElementById("modalTotalRiskScore").textContent = totalRiskScore.toFixed(2);
+
+      document.getElementById("riskModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("riskModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target === document.getElementById("riskModal")) {
+        closeModal();
+      }
+    }
+  </script>
+  </div>
+  
+  <div>
+    <h1 id="T" style="text-align: center; padding-top: 70px;";>Types of Risks</h1> 
+    <h2 style="padding-right: 100px; margin-left: 100px; margin-right: 100px; font-size: 30px; line-height: 0;"> ★ Market Risk: </h2>
+    <h3 style="padding-right: 100px; margin-left: 150px; margin-right: 100px; margin-bottom: 50px;">
+      Market risk refers to the potential for losses due to fluctuations in the market, such as 
+      changes in asset prices, interest rates, or currency values. It is often driven by 
+      external factors like economic events, geopolitical issues, or market sentiment.</h3>
+
+    <h2 style="padding-right: 100px; margin-left: 100px; margin-right: 100px; font-size: 30px; line-height: 0;"> ★ Financial Risk: </h2>
+    <h3 style="padding-right: 100px; margin-left: 150px; margin-right: 100px; margin-bottom: 50px;">
+      Financial risk pertains to the possibility of a company or investor facing financial instability due to factors 
+      like insufficient cash flow, high debt levels, 
+      or poor investment decisions. It includes risks related to leverage, interest rates, and funding sources.</h3>
+
+    <h2 style="padding-right: 100px; margin-left: 100px; margin-right: 100px; font-size: 30px; line-height: 0;"> ★ Valuation Risk: </h2>
+    <h3 style="padding-right: 100px; margin-left: 150px; margin-right: 100px; margin-bottom: 50px;">
+      Valuation risk occurs when the true value of an asset or investment is difficult to determine or is miscalculated. This can 
+      lead to inaccurate pricing, causing potential financial losses if the actual value is lower than anticipated.</h3>
+
+      <h2 style="padding-right: 100px; margin-left: 100px; margin-right: 100px; font-size: 30px; line-height: 0;"> ★ Sentiment Risk: </h2>
+      <h3 style="padding-right: 100px; margin-left: 150px; margin-right: 100px; margin-bottom: 50px;">
+        Sentiment risk refers to the impact of market participants’ emotions, opinions, or psychological factors on the price of assets. 
+        For example, irrational optimism or panic can lead to price volatility, affecting investment performance.</h3>
+        
+        <h2 style="padding-right: 100px; margin-left: 100px; margin-right: 100px; font-size: 30px; line-height: 0;"> ★ Liquidity Risk: </h2>
+    <h3 style="padding-right: 100px; margin-left: 150px; margin-right: 100px; margin-bottom: 50px;">
+      Liquidity risk arises when an asset cannot be quickly bought or sold in the market without significantly impacting its price. It 
+      occurs when there are fewer buyers or sellers, making it difficult to convert investments into cash when needed.</h3>
+
+      <h2 style="padding-right: 100px; margin-left: 100px; margin-right: 100px; font-size: 30px; line-height: 0;"> ★ Total Risk: </h2>
+    <h3 style="padding-right: 100px; margin-left: 150px; margin-right: 100px; margin-bottom: 50px;">
+      The total risk score is a combined metric that evaluates the overall risk of an investment or portfolio by 
+      considering various factors such as market risk, financial risk, liquidity, and others. 
+      A higher score indicates greater risk exposure, while a lower score reflects safer investments.</h3>
+  </div>
 </body>
 </html>
