@@ -13,8 +13,7 @@ from pymongo import MongoClient
 nltk.download('vader_lexicon')
 sentiment_analyzer = SentimentIntensityAnalyzer()
 
-# Set your free News API key here
-NEWS_API_KEY = 'jpdd94WWcSe1ezsepLfjvfuJXhWWoKBGAurAr7eG'  # Replace with your key
+NEWS_API_KEY = 'jpdd94WWcSe1ezsepLfjvfuJXhWWoKBGAurAr7eG' 
 
 # Tickers to analyze
 tickers = ["AAPL", "TSLA", "MSFT", "AMC", "KO", "GOOG", "NFLX", "AMZN", "META", "NVDA", "SPY", "BABA"]
@@ -58,7 +57,7 @@ data = [get_features(t) for t in tickers]
 df = pd.DataFrame(data)
 
 # 2. Create target scores from real data
-# (In production, you'd use labeled historical risk assessments)
+
 df["market_risk_score"] = df["beta"] * 5 + np.random.rand(len(df)) * 2
 
 df["financial_risk_score"] = df["debt_to_equity"] / 10 + np.random.rand(len(df)) * 2
@@ -109,10 +108,12 @@ df_output['total_risk_score'] = df_output[["market_risk", "financial_risk", "val
 risk_data = df_output.to_dict(orient='records')
 
 # 7. MongoDB Atlas connection
-# Replace with your MongoDB Atlas URI
 client = MongoClient('mongodb+srv://avibagchi04:QsJdKKFpmmb2oofZ@wehackcluster.hidg3jn.mongodb.net/')
 db = client['risk_assessment_db']  # Database name
 collection = db['risk_data']  # Collection name
+
+collection.drop() #drops database if it is prepopulated
+
 collection.insert_many(risk_data)  # Insert data
 
 print("\n📊 Risk data successfully inserted into MongoDB Atlas!")
