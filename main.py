@@ -14,7 +14,7 @@ nltk.download('vader_lexicon')
 sentiment_analyzer = SentimentIntensityAnalyzer()
 
 # Set your free News API key here
-NEWS_API_KEY = 'IJFvQDiQZDDHqidkYvd4aOzS553o7yx6otKKnBu2'  # Replace with your key
+NEWS_API_KEY = 'jpdd94WWcSe1ezsepLfjvfuJXhWWoKBGAurAr7eG'  # Replace with your key
 
 # Tickers to analyze
 tickers = ["AAPL", "TSLA", "MSFT", "AMC", "KO", "GOOG", "NFLX", "AMZN", "META", "NVDA", "SPY", "BABA"]

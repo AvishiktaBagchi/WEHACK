@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Assessment</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+  <h1>Risk Assessment Data</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>Market Risk</th>
+        <th>Financial Risk</th>
+        <th>Valuation Risk</th>
+        <th>Sentiment Risk</th>
+        <th>Liquidity Risk</th>
+        <th>Total Risk Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% riskData.forEach(risk => { %>
+        <tr>
+          <td><%= risk.ticker %></td>
+          <td><%= risk.market_risk %></td>
+          <td><%= risk.financial_risk %></td>
+          <td><%= risk.valuation_risk %></td>
+          <td><%= risk.sentiment_risk %></td>
+          <td><%= risk.liquidity_risk %></td>
+          <td><%= risk.total_risk_score %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
